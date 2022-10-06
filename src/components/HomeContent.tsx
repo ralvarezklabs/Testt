@@ -15,7 +15,7 @@ const HomeContent: NextPage<any> = () => {
   const { data } = useModules();
   const { selectedModule, setSelectedModule } = useModule();
   const [newData, setNewData] = useState<any>();
-  const [modules, setModules] = useState<any>();
+  const [modules, setModules] = useState<string[]>();
 
   //TODO: ESTA BIEN HACER TANTOS?
   const Container = styled.div`
@@ -70,24 +70,90 @@ const HomeContent: NextPage<any> = () => {
   `;
 
   useEffect(() => {
-    //createJSONStructure(items);
     setNewData(data);
-    //setModules(newData[selectedModule]);
+    //TODO: es selected module
+    setModules(Object.keys(data?.auth_module));
   }, [data]);
 
   let users = ["User 1", "User 2", "User 3"];
   let modules2 = ["Module 1", "Module 2", "Module 3"];
+  // const dummy: Ret = {
+  //   content_module: {
+  //       "authz.provider_4": [
+  //           "User 0",
+  //           "User 1",
+  //           "User 6",
+  //           "User 7",
+  //           "User 12",
+  //           "User 19"
+  //       ],
+  //       "authz.provider_3": [
+  //           "User 2",
+  //           "User 3",
+  //           "User 5",
+  //           "User 10",
+  //           "User 11",
+  //           "User 18"
+  //       ],
+  //       "authz.provider_1": [
+  //           "User 4",
+  //           "User 14"
+  //       ],
+  //       "authz.provider_2": [
+  //           "User 8",
+  //           "User 9",
+  //           "User 13",
+  //           "User 15",
+  //           "User 16",
+  //           "User 17"
+  //       ]
+  //   },
+  //   auth_module: {
+  //     "authn.provider_3": [
+  //         "User 0",
+  //         "User 7",
+  //         "User 11",
+  //         "User 12",
+  //         "User 15"
+  //     ],
+  //    "authn.provider_2": [
+  //         "User 1",
+  //         "User 6",
+  //         "User 8",
+  //         "User 10",
+  //         "User 13",
+  //         "User 14",
+  //         "User 16",
+  //         "User 18"
+  //     ],
+  //     "authn.provider_4": [
+  //         "User 2",
+  //         "User 5",
+  //         "User 9"
+  //     ],
+  //     "authn.provider_1": [
+  //         "User 3",
+  //         "User 4",
+  //         "User 17",
+  //         "User 19"
+  //     ]
+  // }
+
   //let modules = newData ? newData.content_module : ["Hola"];
 
   const handleClickAuth = () => {
     setSelectedModule("Auth_module");
-    setModules(newData?.auth_module);
+    setModules(newData.auth_module);
   };
 
   const handleClickContent = () => {
     setSelectedModule("Content_module");
-    setModules(newData?.content_module);
+    setModules(newData.content_module);
   };
+
+  const handleClickModule = (module: string) => {
+    console.log(newData["auth_module"][module]);
+  }
 
   //TODO: cambiar strings a constantes
 
@@ -110,16 +176,16 @@ const HomeContent: NextPage<any> = () => {
         <SecondContainer>
           <>
             <SmallContainer>
-              {/* {modules.map((module, index) => {
+              {modules?.map((module, index) => {
                 return (
                   <CommonButton
                     text={module}
-                    handleClick={handleClickAuth}
+                    handleClick={() => handleClickModule(module)}
                     selected={false}
                     key={index}
                   ></CommonButton>
                 );
-              })} */}
+              })}
             </SmallContainer>
             <TitleLabel>Number of users in Module 1:</TitleLabel>
             <LabelContainer>
