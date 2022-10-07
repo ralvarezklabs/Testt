@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Data } from '../interfaces/data';
 import items from '../../public/exports-files';
-import { DataToRender } from '../interfaces/dataToRender';
+import { DataToRender, IDataModels } from '../interfaces/dataToRender';
 
 interface UseModules {
-  data?: DataToRender
+  data?: IDataModels
 }
 
 const useModules = (): UseModules => {
-  const [modules, setModules] = useState<DataToRender>()
+  const [modules, setModules] = useState<IDataModels>()
   const calculation = useMemo(() => createJSONStructure(items), [items]);
 
   useEffect(() => {
@@ -28,27 +28,27 @@ const useModules = (): UseModules => {
       let contentModuleName = d.provider.content_module;
       let user = d.name;
 
-      if (!(authModuleName in newData.auth_module)) {
+      if (!(authModuleName in newData.data.auth_module)) {
         newData.setAuth_module(authModuleName, [user]);
         // newData.auth_module[authModuleName] = [user];
       } else {
-        let value = newData.auth_module[authModuleName];
+        let value = newData.data.auth_module[authModuleName];
         value.push(user);
         newData.setAuth_module(authModuleName, value);
         //newData.auth_module[authModuleName] = value;
       }
 
-      if (!(contentModuleName in newData.content_module)) {
+      if (!(contentModuleName in newData.data.content_module)) {
         // newData.content_module[contentModuleName] = [user];
         newData.setContent_module(contentModuleName, [user]);
       } else {
-        let value = newData.content_module[contentModuleName];
+        let value = newData.data.content_module[contentModuleName];
         value.push(user);
         newData.setContent_module(contentModuleName, value);
         //newData.content_module[contentModuleName] = value;
       }
     });
-    setModules(newData);
+    setModules(newData.data);
   };
 
   return {
